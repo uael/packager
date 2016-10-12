@@ -34,3 +34,10 @@ setup(
   packages=['pkgr'],
   entry_points={'console_scripts': ['packager=pkgr:script_main']}
 )
+
+# Local variables:
+# tab-width: 2
+# c-basic-offset: 2
+# End:
+# vim600: noet sw=2 ts=2 fdm=marker
+# vim<600: noet sw=2 ts=2
