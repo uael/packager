@@ -1,4 +1,4 @@
 requests
 gyp
-aenum
-python-dateutil
+json
+zipfile

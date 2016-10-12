@@ -23,13 +23,14 @@
 from setuptools import setup
 
 setup(
-    name='packager',
-    version='0.1',
-    description='C/C++ package manager built on the top of gyp',
-    author='Abel Lucas',
-    author_email='ylilt71@gmail.com',
-    url='https://github.com/packager/packager',
-    package_dir={'': 'src'},
-    packages=['pkgr'],
-    entry_points={'console_scripts': ['packager=pkgr:script_main']}
+  name='packager',
+  version='0.1.1',
+  description='C/C++ package manager built on the top of gyp',
+  author='Abel Lucas',
+  author_email='ylilt71@gmail.com',
+  url='https://github.com/packager/packager',
+  package_dir={'': 'src'},
+  install_requires=['requests', 'gyp', 'json', 'zipfile'],
+  packages=['pkgr'],
+  entry_points={'console_scripts': ['packager=pkgr:script_main']}
 )
