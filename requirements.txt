@@ -1,0 +1,4 @@
+requests
+gyp
+aenum
+python-dateutil

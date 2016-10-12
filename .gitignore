@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Usr
+.idea/
+.gyp
+test/libsomelib/out/
+test/libsomelib/vendor/
