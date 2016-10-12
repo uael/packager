@@ -1,4 +1,2 @@
 requests
 gyp
-json
-zipfile
