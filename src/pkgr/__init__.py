@@ -1,13 +1,10 @@
 import argparse
 import os
-import shutil
 import sys
 
 from common import BuildError
 from common import PkgrError
-from package import Tag
-from pkgr import gyp_warp
-from pkgr import install
+from pkgr import command
 
 def pkgr_main(args):
   parser = argparse.ArgumentParser()
@@ -29,62 +26,26 @@ def pkgr_main(args):
     os.chdir(options.cwd)
 
   root = os.getcwd()
-  gyp_file_name = '.gyp'
-  composer_file_name = 'composer.json'
-  output_dir = os.path.join(os.path.abspath(root), 'out')
-  deps_dir = os.path.join(os.path.abspath(root), 'vendor')
+  commands = []
 
   if args:
     if 'clean' == args[0]:
-      if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
-      if os.path.exists(deps_dir):
-        shutil.rmtree(deps_dir)
-      gyp_file = os.path.join(root, gyp_file_name)
-      if os.path.isfile(gyp_file):
-        os.remove(gyp_file)
-      return 0
-    if args[0] in ['gyp', 'generate', 'gen']:
-      args.pop(0)
-    elif 'ninja' == args[0]:
-      args.pop(0)
-      for r, dirs, files in os.walk(output_dir):
-        if 'build.ninja' in files:
-          os.chdir(r)
-          return os.system("ninja " + ' '.join(args))
-      raise BuildError("Unable to ninja anything.")
-    elif 'make' == args[0]:
-      args.pop(0)
-      for r, dirs, files in os.walk(output_dir):
-        if 'Makefile' in files:
-          os.chdir(r)
-          return os.system("make " + ' '.join(args))
-      raise BuildError("Unable to make anything.")
-    elif 'help' == args[0]:
-      return os.system(args[1] + " -h")
+      commands.append(command.Clean(root))
+    elif 'generate' == args[0]:
+      commands.append(command.Generate(root))
     elif 'install' == args[0]:
-      args.pop(0)
-      install.make(root, deps_dir, composer_file_name, gyp_file_name)
+      commands.append(command.Install(root))
+    elif 'build' == args[0]:
+      commands.append(command.Build(root))
+    else:
+      raise PkgrError('Unknown command '+args[0])
   else:
-    install.make(root, deps_dir, composer_file_name, gyp_file_name)
+    commands.append(command.Build(root))
 
-  # Run gyp in all other case
-  ex = gyp_warp.run_gyp(args)
-  if ex != 0: return ex
-
-  has_ninja = 0
-  has_make = 0
-  for r, dirs, files in os.walk(output_dir):
-    if not has_make and 'build.ninja' in files:
-      os.chdir(r)
-      has_ninja = 1
-      ex = os.system("ninja")
-      if ex != 0: return ex
-    elif not has_ninja and 'Makefile' in files:
-      os.chdir(r)
-      has_make = 1
-      ex = os.system("make")
-      if ex != 0: return ex
+  for cmd in commands:
+    ex = cmd.run()
+    if ex != 0:
+      return ex
 
   return 0
 

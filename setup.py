@@ -24,7 +24,7 @@ from setuptools import setup
 
 setup(
   name='packager',
-  version='0.1.6',
+  version='0.2.0',
   description='C/C++ package manager built on the top of gyp',
   author='Abel Lucas',
   author_email='ylilt71@gmail.com',
