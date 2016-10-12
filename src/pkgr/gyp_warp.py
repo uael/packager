@@ -3,8 +3,6 @@ import os
 import subprocess
 import sys
 
-import gyp
-
 import pkgr.common
 
 try:
@@ -47,10 +45,7 @@ def run_gyp(args):
   if not gyp_parallel_support:
     args.append('--no-parallel')
 
-  ex = gyp.main(list(args))
-  if ex != 0:
-    print 'Error running GYP'
-  return ex
+  return os.system("gyp " + ' '.join(args))
 
 def gen(composer_json, file_path, deps_dir, deps):
   gyp_json = {}
