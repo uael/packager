@@ -20,7 +20,7 @@ def reporthook(blocknum, blocksize, totalsize):
     if readsofar >= totalsize:  # near the end
       sys.stderr.write("\n")
   else:  # total size is unknown
-    sys.stderr.write("\r" + rem_file + "%5.1f%% * / *" % 100, 100)
+    sys.stderr.write("\r" + rem_file + "100% * / *")
 
 class Dist:
   def __init__(self, jsn):
